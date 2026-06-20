@@ -1,31 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
   <defs>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#C9A96E;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#E8C97A;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#B8944A;stop-opacity:1" />
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8C97A"/>
+      <stop offset="100%" stop-color="#B8944A"/>
     </linearGradient>
-    <linearGradient id="greyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#9A9A8A;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#7A7A6A;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#6A6A5A;stop-opacity:1" />
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#AAAAAA"/>
+      <stop offset="100%" stop-color="#666666"/>
     </linearGradient>
   </defs>
-  <!-- N letter -->
-  <polygon points="18,10 38,10 80,75 80,10 100,10 100,110 80,110 38,45 38,110 18,110" fill="url(#goldGrad)"/>
-  <!-- diagonal cut top of N -->
-  <polygon points="18,10 38,10 48,26 28,26" fill="url(#goldGrad)"/>
-  <!-- S letter -->
-  <path d="M120,10 Q170,10 170,45 Q170,70 140,78 Q170,85 170,112 Q170,148 120,148 L108,148 L108,130 Q150,130 150,112 Q150,95 120,88 L108,88 L108,70 Q140,70 150,45 Q150,28 120,28 L108,28 L108,10 Z" fill="url(#greyGrad)"/>
-  <!-- Card icon in center -->
-  <rect x="52" y="55" width="52" height="38" rx="5" ry="5" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
-  <rect x="58" y="64" width="14" height="11" rx="2" ry="2" fill="url(#goldGrad)" opacity="0.8"/>
-  <line x1="78" y1="66" x2="98" y2="66" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <line x1="78" y1="72" x2="92" y2="72" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <line x1="58" y1="80" x2="98" y2="80" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-  <line x1="58" y1="86" x2="88" y2="86" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-  <!-- NS SOLUTIONS text -->
-  <text x="94" y="172" font-family="Georgia, serif" font-size="20" font-weight="bold" letter-spacing="8" fill="url(#greyGrad)" text-anchor="middle">NS SOLUTIONS</text>
-  <!-- underline -->
-  <line x1="60" y1="178" x2="128" y2="178" stroke="url(#greyGrad)" stroke-width="1.2" opacity="0.6"/>
+
+  <!-- Fundo circular suave -->
+  <circle cx="100" cy="90" r="82" fill="rgba(255,255,255,0.03)" stroke="url(#g1)" stroke-width="1.2" opacity="0.4"/>
+
+  <!-- Letra N -->
+  <g transform="translate(22, 30)">
+    <rect x="0" y="0" width="14" height="76" fill="url(#g1)"/>
+    <polygon points="0,0 14,0 54,58 54,0 68,0 68,76 54,76 14,18 14,76 0,76" fill="url(#g1)"/>
+  </g>
+
+  <!-- Letra S -->
+  <g transform="translate(110, 30)">
+    <path d="M10,0 Q60,0 60,28 Q60,46 30,54 Q60,62 60,82 Q60,110 10,110 L0,110 L0,96 Q44,96 44,82 Q44,68 10,62 L0,62 L0,48 Q34,48 44,28 Q44,14 10,14 L0,14 L0,0 Z" fill="url(#g2)"/>
+  </g>
+
+  <!-- Texto NS SOLUTIONS -->
+  <text x="100" y="192" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="4" fill="url(#g2)" text-anchor="middle" opacity="0.85">NS SOLUTIONS</text>
 </svg>
