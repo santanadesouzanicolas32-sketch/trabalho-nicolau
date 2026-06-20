@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C9A96E;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#E8C97A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8944A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="greyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9A9A8A;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7A7A6A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6A6A5A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- N letter -->
+  <polygon points="18,10 38,10 80,75 80,10 100,10 100,110 80,110 38,45 38,110 18,110" fill="url(#goldGrad)"/>
+  <!-- diagonal cut top of N -->
+  <polygon points="18,10 38,10 48,26 28,26" fill="url(#goldGrad)"/>
+  <!-- S letter -->
+  <path d="M120,10 Q170,10 170,45 Q170,70 140,78 Q170,85 170,112 Q170,148 120,148 L108,148 L108,130 Q150,130 150,112 Q150,95 120,88 L108,88 L108,70 Q140,70 150,45 Q150,28 120,28 L108,28 L108,10 Z" fill="url(#greyGrad)"/>
+  <!-- Card icon in center -->
+  <rect x="52" y="55" width="52" height="38" rx="5" ry="5" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
+  <rect x="58" y="64" width="14" height="11" rx="2" ry="2" fill="url(#goldGrad)" opacity="0.8"/>
+  <line x1="78" y1="66" x2="98" y2="66" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="78" y1="72" x2="92" y2="72" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="58" y1="80" x2="98" y2="80" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="58" y1="86" x2="88" y2="86" stroke="url(#goldGrad)" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+  <!-- NS SOLUTIONS text -->
+  <text x="94" y="172" font-family="Georgia, serif" font-size="20" font-weight="bold" letter-spacing="8" fill="url(#greyGrad)" text-anchor="middle">NS SOLUTIONS</text>
+  <!-- underline -->
+  <line x1="60" y1="178" x2="128" y2="178" stroke="url(#greyGrad)" stroke-width="1.2" opacity="0.6"/>
+</svg>

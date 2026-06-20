@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="Brechó Eco-Herança — onde cada peça carrega uma herança e cada escolha cuida do planeta. Moda vintage curada em São Paulo.">
+<meta name="keywords" content="brechó,vintage,moda sustentável,peças únicas,São Paulo,Jardim Esmeralda,eco fashion">
+<meta property="og:title" content="Brechó Eco-Herança | Moda Vintage — SP">
+<meta property="og:description" content="Peças únicas que carregam herança. Moda sustentável curada em São Paulo.">
+<title>Brechó Eco-Herança | Moda Vintage &amp; Sustentável — São Paulo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/features.css">
+
+<style>
+.hero-grid-lines { position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden; }
+.hero-grid-lines span { position:absolute;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(196,96,122,0.07),transparent); }
+/* Modal cart button */
+.modal-cart-btn {
+  display:flex;align-items:center;justify-content:center;gap:.6rem;
+  width:100%;padding:.78rem;border:1px solid var(--border-hi);border-radius:8px;
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);
+  font-family:inherit;font-weight:600;margin-top:.7rem;transition:all .3s;cursor:none;
+  background:var(--rose-soft);
+}
+.modal-cart-btn:hover,.modal-cart-btn.added { background:var(--rose);color:#fff;border-color:var(--rose); }
+</style>
+</head>
+<body>
+
+<!-- BG ORBS -->
+<div id="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- PROGRESS BAR -->
+<div id="pgbar"></div>
+
+<!-- CART TOAST -->
+<div id="cart-toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span class="toast-msg"></span>
+</div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="ldr-brand">Eco<em>-</em>Herança</div>
+  <div class="ldr-bar"></div>
+  <div class="ldr-sub">Brechó · São Paulo</div>
+</div>
+
+<!-- CART DRAWER -->
+<div id="cart-overlay" onclick="closeCart()"></div>
+<div id="cart-drawer">
+  <div class="cart-header">
+    <div class="cart-title">
+      Lista de Interesse <span id="cart-item-count">0</span>
+    </div>
+    <button class="cart-close" onclick="closeCart()" aria-label="Fechar carrinho">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-summary">
+      <span class="cart-summary-label">Peças na lista</span>
+      <span class="cart-summary-count" id="cart-footer-count">0</span>
+    </div>
+    <a id="cart-wa-btn" href="#" class="cart-wa-btn" target="_blank" rel="noopener" style="display:none">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Consultar tudo no WhatsApp
+    </a>
+    <button id="cart-clear-btn" class="cart-clear-btn" onclick="clearCart()" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+      Limpar lista
+    </button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+  <a href="#" class="nav-logo" aria-label="Eco-Herança">Eco<em>-</em>Herança</a>
+  <div class="nav-links">
+    <a href="#novidades">Novidades</a>
+    <a href="#catalogo">Catálogo</a>
+    <a href="#sobre">Nossa História</a>
+    <a href="#eco">Eco</a>
+    <a href="#loja">Visitar</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-fav-wrap">
+      <button class="nav-icon-btn" onclick="openFavs()" title="Favoritos" aria-label="Favoritos">
+        <i data-lucide="heart"></i>
+        <span class="nav-fav-ct" id="fav-ct">0</span>
+      </button>
+    </div>
+    <div class="nav-cart-wrap">
+      <button class="nav-icon-btn" onclick="openCart()" title="Lista de Interesse" aria-label="Lista">
+        <i data-lucide="shopping-bag"></i>
+        <span class="nav-fav-ct" id="cart-count-badge">0</span>
+      </button>
+    </div>
+    <button class="nav-icon-btn" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})" title="Buscar">
+      <i data-lucide="search"></i>
+    </button>
+    <button id="menu-btn" aria-label="Menu" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <a href="#novidades" onclick="toggleMenu()">Novidades</a>
+  <a href="#catalogo"  onclick="toggleMenu()">Catálogo</a>
+  <a href="#sobre"     onclick="toggleMenu()">Nossa História</a>
+  <a href="#eco"       onclick="toggleMenu()">Eco</a>
+  <a href="#loja"      onclick="toggleMenu()">Visitar</a>
+  <span class="mm-sub">Brechó · São Paulo</span>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1600&q=80&fit=crop" alt="Moda vintage editorial" loading="eager">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-content">
+    <p class="hero-tag">Brechó Eco-Herança · São Paulo</p>
+    <h1 class="hero-h1">
+      <span class="line"><span class="line-inner">Herança</span></span>
+      <span class="line"><span class="line-inner">que se <em>veste.</em></span></span>
+      <span class="line"><span class="line-inner">Eco que se sente.</span></span>
+    </h1>
+    <div class="hero-row">
+      <p class="hero-desc">Peças únicas selecionadas com cuidado — cada herança em tecido carrega a história de quem um dia a amou.</p>
+      <div class="hero-ctas">
+        <a href="#catalogo" class="btn-rose">Explorar Catálogo</a>
+        <a href="#sobre"    class="btn-ghost">Nossa História</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-txt">Role para baixo</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div id="marquee" role="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Moda Vintage<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Peças Únicas<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Eco Consciente<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Curado em SP<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Herança em Tecido<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Visita Presencial<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Sustentabilidade<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Moda Circular<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Moda Vintage<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Peças Únicas<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Eco Consciente<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Curado em SP<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Herança em Tecido<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Visita Presencial<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Sustentabilidade<span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">Moda Circular<span class="marquee-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section id="intro" class="sec">
+  <div class="intro-grid">
+    <div class="intro-left rl">
+      <p class="sec-label">Sobre nós</p>
+      <h2 class="sec-h2">Um brechó com alma <em>e propósito</em></h2>
+      <div class="intro-stat-grid" style="margin-top:2.5rem">
+        <div class="intro-stat rv">
+          <div class="intro-stat-n" data-counter data-target="500" data-suffix="+">500+</div>
+          <div class="intro-stat-l">Peças únicas</div>
+        </div>
+        <div class="intro-stat rv" style="transition-delay:.1s">
+          <div class="intro-stat-n" data-counter data-target="8">8</div>
+          <div class="intro-stat-l">Anos de história</div>
+        </div>
+        <div class="intro-stat rv" style="transition-delay:.2s">
+          <div class="intro-stat-n" data-counter data-target="100" data-suffix="%">100%</div>
+          <div class="intro-stat-l">Curado com cuidado</div>
+        </div>
+        <div class="intro-stat rv" style="transition-delay:.3s">
+          <div class="intro-stat-n" style="font-size:2.2rem">∞</div>
+          <div class="intro-stat-l">Histórias repassadas</div>
+        </div>
+      </div>
+    </div>
+    <div class="intro-right rr">
+      <blockquote class="big-quote">
+        "Cada peça do nosso acervo carrega <em>uma herança</em> — a memória de alguém que a amou antes de você."
+      </blockquote>
+      <p>O Eco-Herança nasceu da crença de que a moda mais bonita é aquela que já viveu. Que já atravessou décadas, já conheceu o corpo e o movimento de outra pessoa, e ainda assim tem muito para dar.</p>
+      <p>Nosso brechó não vende online. A experiência de encontrar a peça certa — sentir o tecido, ver o caimento, descobrir a história — só acontece quando você nos visita.</p>
+      <a href="#loja" class="btn-ghost" style="margin-top:1.8rem;display:inline-flex">Nos encontre em SP</a>
+    </div>
+  </div>
+</section>
+
+<!-- NOVIDADES -->
+<section id="novidades">
+  <div class="nov-head">
+    <div>
+      <p class="sec-label">Recém Chegadas</p>
+      <h2 class="sec-h2">Novas <em>Peças</em></h2>
+    </div>
+    <div class="nov-drag-hint">
+      <i data-lucide="move-horizontal"></i>
+      Arraste para ver mais
+    </div>
+  </div>
+  <div class="nov-scroll" id="nov-scroll"></div>
+</section>
+
+<!-- CATALOGO -->
+<section id="catalogo" class="sec">
+  <div class="cat-head">
+    <div>
+      <p class="sec-label">Acervo</p>
+      <h2 class="sec-h2">Catálogo <em>Completo</em></h2>
+      <div class="cat-filters" id="filters">
+        <button class="cat-filter active" data-f="todos">Todos</button>
+        <button class="cat-filter" data-f="feminino">Feminino</button>
+        <button class="cat-filter" data-f="masculino">Masculino</button>
+        <button class="cat-filter" data-f="acessorio">Acessórios</button>
+      </div>
+    </div>
+    <div class="cat-search">
+      <i data-lucide="search"></i>
+      <input type="text" id="search-input" placeholder="Buscar peças..." autocomplete="off">
+    </div>
+  </div>
+  <div class="cat-grid" id="prod-grid"></div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto" class="rv">
+  <div class="manifesto-quote">
+    A moda mais <em>sustentável</em> é aquela que já existe. Cada peça que escolhemos em vez de comprar nova é um ato de amor ao planeta — e uma <em>herança</em> que continua viva.
+  </div>
+  <p class="manifesto-attr">— Manifesto Eco-Herança</p>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="sobre-grid">
+    <div class="sobre-img rl">
+      <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&q=80&fit=crop" alt="Interior da loja Eco-Herança">
+      <div class="sobre-img-overlay"></div>
+    </div>
+    <div class="sobre-text rr">
+      <p class="sec-label">Nossa História</p>
+      <h2 class="sec-h2">Mais que um brechó. <em>Uma curadoria</em> com herança.</h2>
+      <p>O Eco-Herança nasceu no Jardim Esmeralda, em São Paulo, com uma missão simples: resgatar peças que merecem continuar sendo amadas. Cada item do nosso acervo passa por uma triagem cuidadosa — selecionamos apenas aquelas que têm qualidade, história e alma.</p>
+      <p>O "Eco" no nosso nome representa nosso compromisso com a moda circular. Cada venda é um ciclo fechado — uma peça que deixa de ir para o lixo e passa a viver em um novo guarda-roupa, gerando menos impacto e mais beleza no mundo.</p>
+      <p>O "Herança" é a essência do que fazemos. Guardamos em tecido o legado de modas que passaram, estilos que marcaram e peças que resistiram ao tempo.</p>
+      <a href="#loja" class="btn-ghost">Venha nos visitar</a>
+    </div>
+  </div>
+</section>
+
+<!-- ECO -->
+<section id="eco" class="sec">
+  <div class="eco-grid">
+    <div class="rl">
+      <p class="sec-label">Nosso Eco</p>
+      <h2 class="sec-h2">Moda que <em>respeita</em></h2>
+      <div class="eco-pillars" style="margin-top:2.5rem">
+        <div class="eco-pillar rv">
+          <span class="eco-pillar-n">01</span>
+          <div class="eco-pillar-title">Reaproveitar</div>
+          <p class="eco-pillar-desc">Damos nova vida a peças que já existem, evitando o descarte têxtil e o consumo desnecessário de recursos naturais.</p>
+        </div>
+        <div class="eco-pillar rv" style="transition-delay:.12s">
+          <span class="eco-pillar-n">02</span>
+          <div class="eco-pillar-title">Ressignificar</div>
+          <p class="eco-pillar-desc">Cada peça ganha um novo dono, um novo capítulo — a moda circular é o futuro, e o brechó é o presente dele.</p>
+        </div>
+        <div class="eco-pillar rv" style="transition-delay:.24s">
+          <span class="eco-pillar-n">03</span>
+          <div class="eco-pillar-title">Renovar</div>
+          <p class="eco-pillar-desc">Seu guarda-roupa se renova com peças únicas sem o custo ambiental de produção de uma peça nova.</p>
+        </div>
+      </div>
+    </div>
+    <div class="eco-right rr">
+      <p class="big-text">A indústria fashion é a <em>2ª mais poluente</em> do mundo. Escolher um brechó é um ato de resistência — e de estilo.</p>
+      <p>Cada peça produzida pela indústria têxtil consome em média 2.700 litros de água. Uma jaqueta vintage que você encontra aqui não custou nada disso ao planeta.</p>
+      <p>No Eco-Herança, acreditamos que consciência e estilo andam juntos. Nossas peças têm qualidade, história e um impacto zero no meio ambiente — afinal, elas já existem.</p>
+      <div class="eco-nums">
+        <div class="eco-n">
+          <span class="eco-n-val" data-counter data-target="2700" data-suffix="L">2700L</span>
+          <span class="eco-n-lbl">d'água poupados<br>por peça</span>
+        </div>
+        <div class="eco-n">
+          <span class="eco-n-val" data-counter data-target="92" data-suffix="%">92%</span>
+          <span class="eco-n-lbl">menos CO₂ vs<br>peça nova</span>
+        </div>
+        <div class="eco-n">
+          <span class="eco-n-val">0</span>
+          <span class="eco-n-lbl">peças para o<br>aterro sanitário</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="sec">
+  <div class="gallery-head">
+    <p class="sec-label">Galeria</p>
+    <h2 class="sec-h2">O acervo em <em>imagens</em></h2>
+  </div>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<!-- LOJA -->
+<section id="loja" class="sec">
+  <div class="loja-grid">
+    <div class="loja-info rv">
+      <p class="sec-label">Visite-nos</p>
+      <h2 class="sec-h2">Venha viver a <em>experiência</em></h2>
+      <p class="loja-intro">Nossa loja só pode ser experienciada pessoalmente. O toque do tecido, o caimento da peça, o cheiro do tempo — isso não cabe em nenhuma tela.</p>
+      <div class="loja-detail">
+        <div class="loja-icon"><i data-lucide="map-pin"></i></div>
+        <div class="loja-detail-text">
+          <h4>Endereço</h4>
+          <p>Av. Eng. Heitor Antônio Eiras Garcia, 5965<br>Jardim Esmeralda · São Paulo · SP</p>
+        </div>
+      </div>
+      <div class="loja-detail">
+        <div class="loja-icon"><i data-lucide="clock"></i></div>
+        <div class="loja-detail-text">
+          <h4>Horário de Funcionamento</h4>
+          <p>Terça a Sábado — 10h às 19h<br>Domingo — 11h às 17h<br>Segunda — Fechado</p>
+        </div>
+      </div>
+      <div class="loja-detail">
+        <div class="loja-icon"><i data-lucide="phone"></i></div>
+        <div class="loja-detail-text">
+          <h4>Telefone &amp; WhatsApp</h4>
+          <a href="https://wa.me/5511965030076" target="_blank" rel="noopener">(11) 96503-0076</a>
+        </div>
+      </div>
+      <div class="loja-cta-group">
+        <a href="https://wa.me/5511965030076?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Brech%C3%B3%20Eco-Heren%C3%A7a." class="btn-wa" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Falar pelo WhatsApp
+        </a>
+        <a href="https://maps.google.com/?q=Av.+Eng.+Heitor+Antonio+Eiras+Garcia+5965+Jardim+Esmeralda+Sao+Paulo" class="btn-ghost" target="_blank" rel="noopener">
+          <i data-lucide="navigation" style="width:14px;height:14px"></i>
+          Como Chegar
+        </a>
+      </div>
+    </div>
+    <div class="loja-map rr">
+      <iframe
+        src="https://maps.google.com/maps?q=Av.+Eng.+Heitor+Antonio+Eiras+Garcia,5965,Jardim+Esmeralda,S%C3%A3o+Paulo,SP,Brasil&t=m&z=15&output=embed&iwloc=near"
+        title="Localização Brechó Eco-Herança"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="sec">
+  <div style="max-width:800px;margin:0 auto">
+    <p class="sec-label">Dúvidas</p>
+    <h2 class="sec-h2">Perguntas <em>Frequentes</em></h2>
+  </div>
+  <div class="faq-inner" id="faq-inner"></div>
+</section>
+
+<!-- INSTAGRAM -->
+<section id="instagram" class="sec">
+  <p class="sec-label" style="justify-content:center">Redes Sociais</p>
+  <h2 class="sec-h2" style="text-align:center;font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:400">
+    Siga no <em style="font-style:italic;color:var(--rose)">Instagram</em>
+  </h2>
+  <div class="ig-grid" id="ig-grid"></div>
+  <a href="https://instagram.com/ecoherenca" class="ig-handle" target="_blank" rel="noopener">@ecoherenca</a>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-name">Eco<em>-</em>Herança</div>
+      <p class="footer-tagline">Brechó curado em São Paulo. Moda vintage, consciente e cheia de herança. Peças únicas que esperam por você.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/ecoherenca" class="footer-soc-btn" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="https://res.cloudinary.com/dhbzgqy3m/image/upload/f_auto,q_auto/instagram_nvgccq" alt="Instagram" width="20" height="20" style="object-fit:contain;filter:brightness(0.5)">
+        </a>
+        <a href="https://wa.me/5511965030076" class="footer-soc-btn" target="_blank" rel="noopener" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="color:var(--text3)"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Navegação</h5>
+      <ul>
+        <li><a href="#novidades">Novidades</a></li>
+        <li><a href="#catalogo">Catálogo</a></li>
+        <li><a href="#sobre">Nossa História</a></li>
+        <li><a href="#eco">Eco &amp; Sustentável</a></li>
+        <li><a href="#loja">Visitar a Loja</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Categorias</h5>
+      <ul>
+        <li><a href="#catalogo" onclick="setFilter('feminino')">Feminino</a></li>
+        <li><a href="#catalogo" onclick="setFilter('masculino')">Masculino</a></li>
+        <li><a href="#catalogo" onclick="setFilter('acessorio')">Acessórios</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contato</h5>
+      <ul>
+        <li><a href="https://wa.me/5511965030076">(11) 96503-0076</a></li>
+        <li><a href="#loja">Jardim Esmeralda, SP</a></li>
+        <li><a href="#">Ter–Sáb: 10h–19h</a></li>
+        <li><a href="#">Dom: 11h–17h</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Brechó <em>Eco-Herança</em>. Todos os direitos reservados.</p>
+    <div class="footer-legal">
+      <a href="#">Política de Privacidade</a>
+      <a href="#">Termos de Uso</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ DESENVOLVIDO POR ══ -->
+<div id="devs">
+  <p class="devs-label">Projeto desenvolvido por</p>
+  <p class="devs-title">A equipe por trás da <em>experiência</em></p>
+
+  <div class="devs-layout">
+    <!-- Amanda -->
+    <div class="dev-side rv" style="transition-delay:.1s">
+      <div class="dev-avatar-sm" style="background:linear-gradient(135deg,#9B59B6,#6C3483)">A</div>
+      <div>
+        <div class="dev-name-sm">Amanda Fernandes</div>
+        <div class="dev-role-sm">Desenvolvimento</div>
+      </div>
+    </div>
+
+    <!-- NICOLAS — Centro, destaque -->
+    <div class="dev-main rv">
+      <div class="dev-crown">✦ Desenvolvedor Principal ✦</div>
+      <img src="assets/ns-logo.svg" alt="NS Solutions" class="dev-ns-logo">
+      <div class="dev-main-name"><em>Nicolas</em> Santana</div>
+      <a href="https://www.instagram.com/ns_solutions.br" target="_blank" rel="noopener" class="dev-ig-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        @ns_solutions.br
+      </a>
+    </div>
+
+    <!-- Davi -->
+    <div class="dev-side rv" style="transition-delay:.2s">
+      <div class="dev-avatar-sm" style="background:linear-gradient(135deg,#2980B9,#1A5276)">D</div>
+      <div>
+        <div class="dev-name-sm">Davi Simão</div>
+        <div class="dev-role-sm">Desenvolvimento</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP FAB -->
+<a id="wa-fab" href="https://wa.me/5511965030076?text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Brech%C3%B3%20Eco-Heren%C3%A7a." target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span class="fab-label">WhatsApp</span>
+</a>
+
+<!-- MODAL -->
+<div id="modal" role="dialog" aria-modal="true">
+  <div id="modal-backdrop" onclick="closeModal()"></div>
+  <div class="modal-inner">
+    <div class="modal-img">
+      <button class="modal-close" onclick="closeModal()" aria-label="Fechar">
+        <i data-lucide="x"></i>
+      </button>
+      <img id="m-img" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <p class="modal-cat" id="m-cat"></p>
+      <h3 class="modal-nm"  id="m-nm"></h3>
+      <div class="modal-consultar">🏪 Consultar na Loja Física</div>
+      <div class="modal-divider"></div>
+      <p class="modal-desc" id="m-desc"></p>
+      <div class="modal-notice">
+        <strong>🌿 Visita presencial</strong>
+        Esta peça está disponível apenas em nossa loja física, no Jardim Esmeralda, SP.
+      </div>
+      <a id="m-wa" href="#" class="modal-wa" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Perguntar sobre esta peça
+      </a>
+      <button id="m-cart-btn" class="modal-cart-btn">+ Adicionar à lista</button>
+      <button class="modal-fav" id="m-fav" onclick="toggleFavModal()">
+        <i data-lucide="heart" style="width:14px;height:14px"></i>
+        <span id="m-fav-txt">Adicionar aos favoritos</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="js/data.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
