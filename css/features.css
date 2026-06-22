@@ -271,10 +271,22 @@ body.cursor-text #cur-ring { opacity: 0; }
 
 @media (max-width: 768px) {
   .devs-layout { gap: 1.5rem; }
-  .dev-main { padding: 2rem 2rem; min-width: 220px; }
-  #devs { padding: 4rem 2rem 3rem; }
+  .dev-main {
+    padding: 2rem 2rem; min-width: 200px;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .dev-side {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  #devs { padding: 3.5rem 1.5rem 2.5rem; }
+  /* Cursor buttons: auto no touch */
+  .cart-close, .cart-wa-btn, .cart-clear-btn,
+  .cart-item-remove, .p-add-cart, .p-fav,
+  .modal-close, .modal-fav { cursor: auto !important; }
 }
 @media (max-width: 540px) {
-  .devs-layout { flex-direction: column; }
-  .dev-side { flex-direction: row; min-width: unset; width: 100%; justify-content: center; padding: 1rem 1.4rem; }
+  .devs-layout { flex-direction: column; align-items: center; }
+  .dev-side { flex-direction: row; min-width: unset; width: 100%; max-width: 300px; justify-content: center; padding: 1rem 1.4rem; }
 }

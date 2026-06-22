@@ -10,16 +10,14 @@ let curSearch = '';
 let curProd   = null;
 let isDragging = false, startX = 0, scrollLeft = 0;
 
-/* ── PROGRESS BAR ────────────────────────────────── */
+/* ── SCROLL ÚNICO + PASSIVO ──────────────────────── */
+const _pgbar = document.getElementById('pgbar');
+const _nav   = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   const sp  = document.documentElement.scrollTop;
   const max = document.documentElement.scrollHeight - window.innerHeight;
-  if (max > 0) document.getElementById('pgbar').style.width = (sp / max * 100) + '%';
-});
-
-/* ── NAVBAR STUCK ─────────────────────────────────── */
-window.addEventListener('scroll', () => {
-  document.getElementById('nav').classList.toggle('stuck', window.scrollY > 60);
+  if (_pgbar && max > 0) _pgbar.style.width = (sp / max * 100) + '%';
+  if (_nav) _nav.classList.toggle('stuck', sp > 60);
 }, { passive: true });
 
 /* ── MOBILE MENU ─────────────────────────────────── */
@@ -32,13 +30,14 @@ function toggleMenu() {
 window.toggleMenu = toggleMenu;
 
 /* ── LOADER ──────────────────────────────────────── */
+const _isMobile = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768;
 window.addEventListener('load', () => {
   setTimeout(() => {
     const loader = document.getElementById('loader');
     if (loader) loader.classList.add('out');
     if (window.lucide) lucide.createIcons();
-    if (window.setupMagneticCursor) window.setupMagneticCursor();
-  }, 1400);
+    if (!_isMobile && window.setupMagneticCursor) window.setupMagneticCursor();
+  }, _isMobile ? 600 : 1000);
 });
 
 /* ── REVEAL ON SCROLL ────────────────────────────── */
@@ -233,9 +232,13 @@ if (filtersEl) {
 }
 const searchEl = document.getElementById('search-input');
 if (searchEl) {
+  let _searchTimer;
   searchEl.addEventListener('input', e => {
-    curSearch = e.target.value.toLowerCase().trim();
-    renderProds();
+    clearTimeout(_searchTimer);
+    _searchTimer = setTimeout(() => {
+      curSearch = e.target.value.toLowerCase().trim();
+      renderProds();
+    }, 220);
   });
 }
 function setFilter(f) {

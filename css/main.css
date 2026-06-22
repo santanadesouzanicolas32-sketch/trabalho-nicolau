@@ -637,3 +637,105 @@ body.cursor-hover #cur-ring { width: 56px; height: 56px; border-color: var(--ros
   #wa-fab { padding: .9rem; border-radius: 50%; }
   .devs-grid { gap: 1rem; }
 }
+@media (max-width: 400px) {
+  .cat-grid { grid-template-columns: 1fr; }
+  .nov-card { flex: 0 0 240px; }
+  .intro-stat-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .eco-nums { flex-direction: column; align-items: center; gap: 1.2rem; }
+  .sec { padding: 4rem 1.2rem; }
+}
+
+/* ══════════════════════════════════════════════════
+   PERFORMANCE & MOBILE OPTIMIZATIONS
+══════════════════════════════════════════════════ */
+
+/* Will-change apenas nos elementos que realmente animam */
+.marquee-track { will-change: transform; }
+#loader        { will-change: opacity; }
+.hero-h1 .line-inner { will-change: transform; }
+#pgbar         { will-change: width; }
+
+/* Content-visibility para acelerar render de seções fora da tela */
+#sobre, #eco, #gallery, #loja, #faq, #instagram, #footer, #devs {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* ── SEM CURSOR CUSTOM NO MOBILE / TOUCH ─────────── */
+@media (pointer: coarse) {
+  #cur-dot, #cur-ring { display: none !important; }
+  body, button, a, .cat-filter, .p-card,
+  .gallery-item, .ig-item, .faq-q, .modal-close,
+  .nov-card, .cart-close, .cart-clear-btn,
+  .cart-wa-btn, .p-add-cart, .p-fav,
+  .p-hover-cta, .nav-icon-btn { cursor: auto !important; }
+}
+
+/* ── MOBILE PERFORMANCE (desabilitar efeitos pesados) */
+@media (max-width: 768px) {
+  /* Orbs consomem muita GPU no mobile — desativar */
+  #bg-orbs { display: none; }
+
+  /* backdrop-filter é muito pesado em mobile */
+  #nav,
+  .intro-stat,
+  .eco-pillar,
+  .cat-search,
+  .p-fav,
+  #mobile-menu,
+  #modal-backdrop,
+  .modal-inner,
+  .dev-side,
+  .dev-main,
+  .glass {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Transições mais curtas no mobile = menos jank */
+  .rv, .rl, .rr { transition-duration: 0.45s; }
+  .nov-card, .p-card { transition-duration: 0.3s; }
+
+  /* Hero: usar dvh para mobile browsers com barra de endereço */
+  #hero { height: 100dvh; min-height: 500px; }
+
+  /* Seções com padding menor no mobile */
+  .sec { padding: 4.5rem 1.5rem; }
+  #novidades { padding: 4.5rem 0 4.5rem 1.5rem; }
+  .nov-head { padding-right: 1.5rem; }
+  #manifesto { padding: 6rem 1.5rem; }
+  #footer { padding: 4rem 1.5rem 2rem; }
+
+  /* Modal mobile: fullscreen */
+  #modal { padding: 0; align-items: flex-end; }
+  .modal-inner {
+    max-height: 95dvh; border-radius: var(--r-lg) var(--r-lg) 0 0;
+    grid-template-columns: 1fr;
+  }
+  .modal-img { min-height: 260px; border-radius: var(--r-lg) var(--r-lg) 0 0; }
+  .modal-body { padding: 1.8rem; }
+
+  /* WhatsApp FAB: sempre pill compacto no mobile */
+  #wa-fab { padding: .85rem 1.2rem; }
+
+  /* Desativar hover animations que não existem no touch */
+  .nov-card:hover,
+  .p-card:hover,
+  .btn-rose:hover,
+  .btn-ghost:hover { transform: none; }
+
+  /* Gallery 2 col no mobile */
+  .gallery-grid { columns: 2; column-gap: .5rem; }
+  .ig-grid { grid-template-columns: repeat(3,1fr); gap: .4rem; }
+}
+
+/* ── MEDIA: REDUCED MOTION ───────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee-track { animation: none; }
+  html { scroll-behavior: auto; }
+}

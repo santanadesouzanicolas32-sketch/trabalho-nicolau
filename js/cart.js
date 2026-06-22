@@ -160,6 +160,8 @@ window.clearCart     = clearCart;
    CURSOR MAGNÉTICO OTIMIZADO
 ══════════════════════════════════════════════════ */
 (function initCursor() {
+  // Não inicializar em dispositivos touch — sem cursor
+  if (window.matchMedia('(pointer: coarse)').matches) return;
   const dot  = document.getElementById('cur-dot');
   const ring = document.getElementById('cur-ring');
   if (!dot || !ring) return;
